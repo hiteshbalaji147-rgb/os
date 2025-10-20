@@ -47,6 +47,36 @@ class Process:
     
     if gantt_chart:
         gantt_chart[-1] = (gantt_chart[-1][0], gantt_chart[-1][1], current_time)
+
+
+            processes = [
+    Process(1, 0, 6),
+    Process(2, 1, 4),
+    Process(3, 2, 2),
+    Process(4, 3, 3)
+]
+
+completed, gantt = preemptive_sjf(processes)
+
+print("Preemptive SJF (SRTF) Results:")
+print("PID\tArrival\tBurst\tWaiting\tTurnaround")
+total_waiting = 0
+total_turnaround = 0
+for p in completed:
+    print(f"{p.pid}\t{p.arrival_time}\t{p.burst_time}\t{p.waiting_time}\t{p.turnaround_time}")
+    total_waiting += p.waiting_time
+    total_turnaround += p.turnaround_time
+
+print(f"\nAverage Waiting Time: {total_waiting / len(processes):.2f}")
+print(f"Average Turnaround Time: {total_turnaround / len(processes):.2f}")
+
+print("\nGantt Chart:")
+for pid, start, end in gantt:
+    print(f"P{pid}: {start}-{end}", end=" ")
+print()
+
+ 
+
     
     return completed, gantt_chart
 
