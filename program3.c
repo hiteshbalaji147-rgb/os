@@ -10,3 +10,12 @@ class Process:
         self.turnaround_time = 0
         self.completion_time = 0
 
+    def preemptive_sjf(processes):
+    processes.sort(key=lambda p: p.arrival_time)
+    ready_queue = []
+    current_time = 0
+    completed = []
+    gantt_chart = []
+    last_pid = None
+    
+   
