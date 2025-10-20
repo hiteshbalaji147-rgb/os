@@ -18,4 +18,36 @@ class Process:
     gantt_chart = []
     last_pid = None
     
-   
+   while len(completed) < len(processes):
+        for p in processes:
+            if p.arrival_time <= current_time and p not in ready_queue and p not in completed:
+                heapq.heappush(ready_queue, (p.remaining_time, p.pid, p))
+        
+        if ready_queue:
+            _, _, p = heapq.heappop(ready_queue)
+            
+            if last_pid != p.pid:
+                if gantt_chart and gantt_chart[-1][0] == last_pid:
+                    gantt_chart[-1] = (last_pid, gantt_chart[-1][1], current_time)
+                gantt_chart.append((p.pid, current_time, current_time + 1))
+                last_pid = p.pid
+            
+            p.remaining_time -= 1
+            current_time += 1
+            
+            if p.remaining_time == 0:
+                p.completion_time = current_time
+                p.turnaround_time = p.completion_time - p.arrival_time
+                p.waiting_time = p.turnaround_time - p.burst_time
+                completed.append(p)
+            else:
+                heapq.heappush(ready_queue, (p.remaining_time, p.pid, p))
+        else:
+            current_time += 1
+    
+    if gantt_chart:
+        gantt_chart[-1] = (gantt_chart[-1][0], gantt_chart[-1][1], current_time)
+    
+    return completed, gantt_chart
+
+# Example usage
