@@ -13,4 +13,22 @@ def round_robin(processes, burst_times, quantum):
     
     execution_order = []  
     
-  
+    while queue:
+        current = queue.popleft()
+        if remaining_burst[current] > quantum:
+            time += quantum
+            remaining_burst[current] -= quantum
+            execution_order.append((processes[current], quantum))
+            queue.append(current)  
+        else:
+            time += remaining_burst[current]
+            execution_order.append((processes[current], remaining_burst[current]))
+            remaining_burst[current] = 0
+            waiting_time[current] = time - burst_times[current]
+            turnaround_time[current] = time
+    
+    avg_waiting = sum(waiting_time) / n
+    avg_turnaround = sum(turnaround_time) / n
+    
+    return execution_order, waiting_time, turnaround_time, avg_waiting, avg_turnaround
+
