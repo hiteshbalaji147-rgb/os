@@ -44,6 +44,29 @@ void priorityScheduling(struct Process proc[], int n) {
     }
 }
 
+void displayResults(struct Process proc[], int n) {
+    float total_wt = 0, total_tat = 0;
+    
+    printf("\n\nProcess Scheduling Results:\n");
+    printf("============================\n");
+    printf("Process\tPriority\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    printf("=======\t========\t==========\t============\t===============\n");
+    
+    for (int i = 0; i < n; i++) {
+        total_wt += proc[i].waiting_time;
+        total_tat += proc[i].turnaround_time;
+        printf("P%d\t%d\t\t%d\t\t%d\t\t%d\n", 
+               proc[i].pid, proc[i].priority, proc[i].burst_time,
+               proc[i].waiting_time, proc[i].turnaround_time);
+    }
+    
+    printf("\n----------------------------------------\n");
+    printf("Average Waiting Time: %.2f units\n", total_wt / n);
+    printf("Average Turnaround Time: %.2f units\n", total_tat / n);
+    printf("CPU Utilization: 100.00%%\n");
+    printf("Throughput: %.2f processes/unit time\n", (float)n / total_tat);
+}
+
 int main() {
     int n;
     
@@ -68,6 +91,7 @@ int main() {
     }
     
     priorityScheduling(proc, n);
+    displayResults(proc, n);
     
     return 0;
 }
