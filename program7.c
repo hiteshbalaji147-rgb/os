@@ -31,3 +31,50 @@ void inputProcesses(struct Process proc[], int n) {
         printf("\n");
     }
 }
+
+// Function to implement SJF scheduling
+void sjfScheduling(struct Process proc[], int n) {
+    int completed = 0;
+    int current_time = 0;
+    
+    printf("\nExecution Timeline:\n");
+    printf("===================\n");
+    
+    while (completed < n) {
+        int shortest = -1;
+        int min_burst = 9999;
+        
+        // Find process with shortest burst time that has arrived
+        for (int i = 0; i < n; i++) {
+            if (!proc[i].completed && proc[i].arrival_time <= current_time) {
+                if (proc[i].burst_time < min_burst) {
+                    min_burst = proc[i].burst_time;
+                    shortest = i;
+                }
+                // If burst times are equal, choose process that arrived first
+                else if (proc[i].burst_time == min_burst && 
+                         proc[i].arrival_time < proc[shortest].arrival_time) {
+                    shortest = i;
+                }
+            }
+        }
+        
+        if (shortest == -1) {
+            // No process available, CPU idle
+            current_time++;
+        } else {
+            // Execute the selected process
+            printf("Time %d: Process P%d (Burst: %d) starts execution\n",
+                   current_time, proc[shortest].pid, proc[shortest].burst_time);
+            
+            current_time += proc[shortest].burst_time;
+            proc[shortest].completion_time = current_time;
+            proc[shortest].turnaround_time = proc[shortest].completion_time - proc[shortest].arrival_time;
+            proc[shortest].waiting_time = proc[shortest].turnaround_time - proc[shortest].burst_time;
+            proc[shortest].completed = true;
+            completed++;
+            
+            printf("Time %d: Process P%d completed\n\n", current_time, proc[shortest].pid);
+        }
+    }
+}
