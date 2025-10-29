@@ -110,3 +110,29 @@ void displayResults(struct Process proc[], int n) {
     printf("Total Completion Time: %d units\n", total_completion_time);
     printf("Throughput: %.2f processes/unit\n", (float)n / total_completion_time);
 }
+
+// Main function
+int main() {
+    int n;
+    
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    printf("\n");
+    
+    struct Process proc[n];
+    
+    // Input process details
+    inputProcesses(proc, n);
+    
+    // Perform SJF scheduling
+    sjfScheduling(proc, n);
+    
+    // Display results
+    displayResults(proc, n);
+    
+    printf("\n========================================\n");
+    printf("SJF Scheduling completed successfully!\n");
+    printf("========================================\n");
+    
+    return 0;
+}
