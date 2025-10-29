@@ -78,3 +78,35 @@ void sjfScheduling(struct Process proc[], int n) {
         }
     }
 }
+
+// Function to display results and statistics
+void displayResults(struct Process proc[], int n) {
+    float total_wt = 0, total_tat = 0;
+    int total_completion_time = 0;
+    
+    printf("\n\nProcess Scheduling Results:\n");
+    printf("============================\n");
+    printf("Process\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n");
+    printf("=======\t=======\t=====\t==========\t==========\t=======\n");
+    
+    for (int i = 0; i < n; i++) {
+        total_wt += proc[i].waiting_time;
+        total_tat += proc[i].turnaround_time;
+        if (proc[i].completion_time > total_completion_time) {
+            total_completion_time = proc[i].completion_time;
+        }
+        
+        printf("P%d\t%d\t%d\t%d\t\t%d\t\t%d\n", 
+               proc[i].pid, proc[i].arrival_time, proc[i].burst_time,
+               proc[i].completion_time, proc[i].turnaround_time, 
+               proc[i].waiting_time);
+    }
+    
+    printf("\n========================================\n");
+    printf("Performance Metrics:\n");
+    printf("========================================\n");
+    printf("Average Waiting Time: %.2f units\n", total_wt / n);
+    printf("Average Turnaround Time: %.2f units\n", total_tat / n);
+    printf("Total Completion Time: %d units\n", total_completion_time);
+    printf("Throughput: %.2f processes/unit\n", (float)n / total_completion_time);
+}
