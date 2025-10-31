@@ -48,3 +48,23 @@ void inputProcesses(struct Process proc[], int n) {
         printf("\n");
     }
 }
+
+// Function to sort processes by arrival time (FCFS order)
+void sortByArrivalTime(struct Process proc[], int n) {
+    struct Process temp;
+    
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            // Sort by arrival time, if equal then by process ID
+            if (proc[j].arrival_time > proc[j + 1].arrival_time ||
+                (proc[j].arrival_time == proc[j + 1].arrival_time && 
+                 proc[j].pid > proc[j + 1].pid)) {
+                
+                // Swap processes
+                temp = proc[j];
+                proc[j] = proc[j + 1];
+                proc[j + 1] = temp;
+            }
+        }
+    }
+}
