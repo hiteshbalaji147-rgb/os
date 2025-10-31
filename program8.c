@@ -68,3 +68,42 @@ void sortByArrivalTime(struct Process proc[], int n) {
         }
     }
 }
+
+// Function to implement FCFS scheduling algorithm
+void fcfsScheduling(struct Process proc[], int n) {
+    int current_time = 0;
+    int total_idle_time = 0;
+    
+    printf("\n╔════════════════════════════════════════════════╗\n");
+    printf("║           Execution Timeline                   ║\n");
+    printf("╚════════════════════════════════════════════════╝\n\n");
+    
+    for (int i = 0; i < n; i++) {
+        // Check if CPU is idle
+        if (current_time < proc[i].arrival_time) {
+            int idle_time = proc[i].arrival_time - current_time;
+            printf("Time %d-%d: CPU IDLE (%d units)\n", 
+                   current_time, proc[i].arrival_time, idle_time);
+            total_idle_time += idle_time;
+            current_time = proc[i].arrival_time;
+        }
+        
+        // Process starts execution
+        proc[i].start_time = current_time;
+        proc[i].response_time = proc[i].start_time - proc[i].arrival_time;
+        
+        printf("Time %d-%d: Process %s (P%d) executing [Burst: %d]\n",
+               current_time, current_time + proc[i].burst_time,
+               proc[i].name, proc[i].pid, proc[i].burst_time);
+        
+        // Update current time
+        current_time += proc[i].burst_time;
+        
+        // Calculate times
+        proc[i].completion_time = current_time;
+        proc[i].turnaround_time = proc[i].completion_time - proc[i].arrival_time;
+        proc[i].waiting_time = proc[i].turnaround_time - proc[i].burst_time;
+    }
+    
+    printf("\nTotal CPU Idle Time: %d units\n", total_idle_time);
+}
