@@ -107,3 +107,53 @@ void fcfsScheduling(struct Process proc[], int n) {
     
     printf("\nTotal CPU Idle Time: %d units\n", total_idle_time);
 }
+
+// Function to display Gantt Chart
+void displayGanttChart(struct Process proc[], int n) {
+    printf("\n╔════════════════════════════════════════════════╗\n");
+    printf("║              Gantt Chart                       ║\n");
+    printf("╚════════════════════════════════════════════════╝\n\n");
+    
+    // Top border
+    printf(" ");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < proc[i].burst_time; j++) {
+            printf("--");
+        }
+        printf(" ");
+    }
+    printf("\n");
+    
+    // Process names
+    printf("|");
+    for (int i = 0; i < n; i++) {
+        int spaces = proc[i].burst_time * 2 - strlen(proc[i].name);
+        int left_space = spaces / 2;
+        int right_space = spaces - left_space;
+        
+        for (int j = 0; j < left_space; j++) printf(" ");
+        printf("%s", proc[i].name);
+        for (int j = 0; j < right_space; j++) printf(" ");
+        printf("|");
+    }
+    printf("\n");
+    
+    // Bottom border
+    printf(" ");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < proc[i].burst_time; j++) {
+            printf("--");
+        }
+        printf(" ");
+    }
+    printf("\n");
+    
+    // Time markers
+    printf("%d", proc[0].start_time);
+    for (int i = 0; i < n; i++) {
+        int spaces = proc[i].burst_time * 2;
+        for (int j = 0; j < spaces; j++) printf(" ");
+        printf("%d", proc[i].completion_time);
+    }
+    printf("\n");
+}
