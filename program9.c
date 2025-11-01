@@ -43,3 +43,37 @@ void initQueue(struct Queue* q, const char* name, int quantum);
 bool isEmpty(struct Queue* q);
 void enqueue(struct Queue* q, struct Process* p);
 struct Process* dequeue(struct Queue* q);
+
+// Initialize queue
+void initQueue(struct Queue* q, const char* name, int quantum) {
+    strcpy(q->name, name);
+    q->time_quantum = quantum;
+    q->front = 0;
+    q->rear = -1;
+    q->count = 0;
+}
+
+// Check if queue is empty
+bool isEmpty(struct Queue* q) {
+    return q->count == 0;
+}
+
+// Add process to queue
+void enqueue(struct Queue* q, struct Process* p) {
+    if (q->count < MAX_PROCESSES) {
+        q->rear = (q->rear + 1) % MAX_PROCESSES;
+        q->processes[q->rear] = p;
+        q->count++;
+    }
+}
+
+// Remove process from queue
+struct Process* dequeue(struct Queue* q) {
+    if (isEmpty(q)) {
+        return NULL;
+    }
+    struct Process* p = q->processes[q->front];
+    q->front = (q->front + 1) % MAX_PROCESSES;
+    q->count--;
+    return p;
+}
