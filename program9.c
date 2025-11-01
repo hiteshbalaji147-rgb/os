@@ -44,6 +44,7 @@ bool isEmpty(struct Queue* q);
 void enqueue(struct Queue* q, struct Process* p);
 struct Process* dequeue(struct Queue* q);
 void inputProcesses(struct Process proc[], int n);
+void assignProcessesToQueues(struct Process proc[], int n, struct Queue queues[], int current_time);
 
 // Initialize queue
 void initQueue(struct Queue* q, const char* name, int quantum) {
@@ -112,5 +113,29 @@ void inputProcesses(struct Process proc[], int n) {
         proc[i].start_time = -1;
         
         printf("\n");
+    }
+}
+
+// Assign arrived processes to their respective queues
+void assignProcessesToQueues(struct Process proc[], int n, struct Queue queues[], int current_time) {
+    for (int i = 0; i < n; i++) {
+        if (!proc[i].completed && proc[i].arrival_time <= current_time && proc[i].remaining_time > 0) {
+            // Check if process is already in a queue
+            bool in_queue = false;
+            for (int q = 0; q < MAX_QUEUES; q++) {
+                for (int j = 0; j < queues[q].count; j++) {
+                    int idx = (queues[q].front + j) % MAX_PROCESSES;
+                    if (queues[q].processes[idx] == &proc[i]) {
+                        in_queue = true;
+                        break;
+                    }
+                }
+                if (in_queue) break;
+            }
+            
+            if (!in_queue) {
+                enqueue(&queues[proc[i].queue_type], &proc[i]);
+            }
+        }
     }
 }
