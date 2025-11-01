@@ -45,6 +45,7 @@ void enqueue(struct Queue* q, struct Process* p);
 struct Process* dequeue(struct Queue* q);
 void inputProcesses(struct Process proc[], int n);
 void assignProcessesToQueues(struct Process proc[], int n, struct Queue queues[], int current_time);
+void multilevelQueueScheduling(struct Process proc[], int n, struct Queue queues[]);
 
 // Initialize queue
 void initQueue(struct Queue* q, const char* name, int quantum) {
@@ -120,7 +121,6 @@ void inputProcesses(struct Process proc[], int n) {
 void assignProcessesToQueues(struct Process proc[], int n, struct Queue queues[], int current_time) {
     for (int i = 0; i < n; i++) {
         if (!proc[i].completed && proc[i].arrival_time <= current_time && proc[i].remaining_time > 0) {
-            // Check if process is already in a queue
             bool in_queue = false;
             for (int q = 0; q < MAX_QUEUES; q++) {
                 for (int j = 0; j < queues[q].count; j++) {
@@ -136,6 +136,60 @@ void assignProcessesToQueues(struct Process proc[], int n, struct Queue queues[]
             if (!in_queue) {
                 enqueue(&queues[proc[i].queue_type], &proc[i]);
             }
+        }
+    }
+}
+
+// Multilevel Queue Scheduling
+void multilevelQueueScheduling(struct Process proc[], int n, struct Queue queues[]) {
+    int current_time = 0;
+    int completed = 0;
+    
+    printf("\n╔═══════════════════════════════════════════════╗\n");
+    printf("║           Execution Timeline                  ║\n");
+    printf("╚═══════════════════════════════════════════════╝\n\n");
+    
+    while (completed < n) {
+        assignProcessesToQueues(proc, n, queues, current_time);
+        
+        bool executed = false;
+        
+        for (int q = 0; q < MAX_QUEUES; q++) {
+            if (!isEmpty(&queues[q])) {
+                struct Process* p = dequeue(&queues[q]);
+                
+                if (!p->started) {
+                    p->start_time = current_time;
+                    p->response_time = current_time - p->arrival_time;
+                    p->started = true;
+                }
+                
+                int exec_time = (queues[q].time_quantum > 0 && p->remaining_time > queues[q].time_quantum) 
+                                ? queues[q].time_quantum : p->remaining_time;
+                
+                printf("Time %d: %s executing %s (P%d) for %d units [Queue: %s]\n",
+                       current_time, queues[q].name, p->name, p->pid, exec_time, queues[q].name);
+                
+                current_time += exec_time;
+                p->remaining_time -= exec_time;
+                
+                if (p->remaining_time == 0) {
+                    p->completed = true;
+                    p->completion_time = current_time;
+                    p->turnaround_time = p->completion_time - p->arrival_time;
+                    p->waiting_time = p->turnaround_time - p->burst_time;
+                    completed++;
+                } else {
+                    enqueue(&queues[q], p);
+                }
+                
+                executed = true;
+                break;
+            }
+        }
+        
+        if (!executed) {
+            current_time++;
         }
     }
 }
