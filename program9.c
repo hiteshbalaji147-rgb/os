@@ -27,3 +27,19 @@ struct Process {
     bool started;
     bool completed;
 };
+
+// Queue structure
+struct Queue {
+    char name[30];
+    int time_quantum;
+    struct Process* processes[MAX_PROCESSES];
+    int front;
+    int rear;
+    int count;
+};
+
+// Function prototypes
+void initQueue(struct Queue* q, const char* name, int quantum);
+bool isEmpty(struct Queue* q);
+void enqueue(struct Queue* q, struct Process* p);
+struct Process* dequeue(struct Queue* q);
