@@ -9,3 +9,21 @@
 #define SYSTEM_QUEUE 0
 #define USER_QUEUE 1
 #define BATCH_QUEUE 2
+
+// Process structure
+struct Process {
+    int pid;
+    char name[20];
+    int arrival_time;
+    int burst_time;
+    int remaining_time;
+    int priority;
+    int queue_type;
+    int completion_time;
+    int turnaround_time;
+    int waiting_time;
+    int response_time;
+    int start_time;
+    bool started;
+    bool completed;
+};
