@@ -21,9 +21,17 @@ int main() {
     // Print from 1 to N
     cout << "Numbers from 1 to " << N << ": ";
     int sum = 0;
+    int evenCount = 0;
+    int oddCount = 0;
+    
     for (int i = 1; i <= N; i++) {
         cout << i << " ";
         sum += i;
+        if (i % 2 == 0) {
+            evenCount++;
+        } else {
+            oddCount++;
+        }
     }
     cout << endl;
     
@@ -39,6 +47,8 @@ int main() {
     cout << "  Total numbers: " << N << endl;
     cout << "  Sum of numbers: " << sum << endl;
     cout << "  Average: " << (double)sum / N << endl;
+    cout << "  Even numbers: " << evenCount << endl;
+    cout << "  Odd numbers: " << oddCount << endl;
     cout << "========================================" << endl;
     
     return 0;
