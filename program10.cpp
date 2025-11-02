@@ -4,6 +4,9 @@ using namespace std;
 
 int main() {
     int N;
+    cout << "========================================" << endl;
+    cout << "   Number Sequence Printer Program     " << endl;
+    cout << "========================================" << endl;
     cout << "Enter a positive integer N: ";
     cin >> N;
     
@@ -12,6 +15,8 @@ int main() {
         cout << "Error: Please enter a positive integer!" << endl;
         return 1;
     }
+    
+    cout << "========================================" << endl;
     
     // Print from 1 to N
     cout << "Numbers from 1 to " << N << ": ";
@@ -26,6 +31,8 @@ int main() {
         cout << i << " ";
     }
     cout << endl;
+    
+    cout << "========================================" << endl;
     
     return 0;
 }
