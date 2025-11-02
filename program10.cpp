@@ -20,8 +20,10 @@ int main() {
     
     // Print from 1 to N
     cout << "Numbers from 1 to " << N << ": ";
+    int sum = 0;
     for (int i = 1; i <= N; i++) {
         cout << i << " ";
+        sum += i;
     }
     cout << endl;
     
@@ -32,6 +34,11 @@ int main() {
     }
     cout << endl;
     
+    cout << "========================================" << endl;
+    cout << "Statistics:" << endl;
+    cout << "  Total numbers: " << N << endl;
+    cout << "  Sum of numbers: " << sum << endl;
+    cout << "  Average: " << (double)sum / N << endl;
     cout << "========================================" << endl;
     
     return 0;
