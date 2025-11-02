@@ -7,6 +7,12 @@ int main() {
     cout << "Enter a positive integer N: ";
     cin >> N;
     
+    // Input validation
+    if (N <= 0) {
+        cout << "Error: Please enter a positive integer!" << endl;
+        return 1;
+    }
+    
     // Print from 1 to N
     cout << "Numbers from 1 to " << N << ": ";
     for (int i = 1; i <= N; i++) {
